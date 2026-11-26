@@ -1,0 +1,10 @@
+import type { NextConfig } from "next";
+
+const nextConfig: NextConfig = {
+  reactStrictMode: true,
+  outputFileTracingIncludes: {
+    "/api/files/**/*": ["./.data/**/*"],
+  },
+};
+
+export default nextConfig;
