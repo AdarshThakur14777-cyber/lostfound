@@ -53,6 +53,11 @@ for emulator/EAS build options and the screen-by-screen tour.
 | `admin@demo.local`    | admin    | everything + settings/users/reports     |
 | `sysadmin@demo.local` | sysadmin | everything (config role)                |
 
+Public registration creates **student** accounts only. Staff, security and admin
+accounts are created by an administrator under **Admin → Users**; the register
+form has no role selector and the API rejects a staff role from the public
+endpoint.
+
 ## Scripts
 
 | Command                | What it does                                             |
@@ -61,8 +66,10 @@ for emulator/EAS build options and the screen-by-screen tour.
 | `npm run build`        | Production build                                          |
 | `npm start`            | Serve the production build                               |
 | `npm run typecheck`    | `tsc --noEmit`                                            |
-| `npm test`             | Vitest (40 tests: redaction, claims, handover, ageing…)   |
+| `npm test`             | Vitest (42 tests: redaction, claims, handover, ageing…)   |
 | `npm run seed`         | Reset + seed users, taxonomy, 18 items, matches, custody  |
+| `npm run demo-images`  | Regenerate the category/demo SVG artwork in `public/demo` |
+| `npm run icons`        | Regenerate app icons from the brand mark                  |
 | `npm run refresh-matches` | Recompute match suggestions                           |
 | `npm run ageing`       | Run the ageing/disposal sweep (also callable from admin)  |
 
