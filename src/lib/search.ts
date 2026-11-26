@@ -50,6 +50,9 @@ export function buildBoardFilter(query: BoardQuery): Filter<ItemDoc> {
 }
 
 export function boardLimit(raw: unknown): number {
+  // `params.get("limit")` returns null when the caller omits it, and
+  // Number(null) is 0 - which would silently clamp the page to one item.
+  if (raw === null || raw === undefined || raw === "") return 12;
   const n = Number(raw);
   if (!Number.isFinite(n)) return 12;
   return Math.min(48, Math.max(1, Math.floor(n)));
