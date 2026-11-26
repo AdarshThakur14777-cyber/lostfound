@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" width="1200" height="900">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#eef2f7"/>
+      <stop offset="1" stop-color="#cbd5e1"/>
+    </linearGradient>
+    <linearGradient id="metal" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#94a3b8"/>
+      <stop offset="0.32" stop-color="#f1f5f9"/>
+      <stop offset="0.62" stop-color="#cbd5e1"/>
+      <stop offset="1" stop-color="#94a3b8"/>
+    </linearGradient>
+    <linearGradient id="brass" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#fde68a"/>
+      <stop offset="0.5" stop-color="#d4a24a"/>
+      <stop offset="1" stop-color="#b8862f"/>
+    </linearGradient>
+    <linearGradient id="screen" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1d4ed8"/>
+      <stop offset="1" stop-color="#0ea5e9"/>
+    </linearGradient>
+    <filter id="shadow" x="-30%" y="-30%" width="160%" height="170%">
+      <feDropShadow dx="0" dy="26" stdDeviation="30" flood-color="#0f172a" flood-opacity="0.16"/>
+    </filter>
+  </defs>
+  <rect width="1200" height="900" fill="url(#bg)"/>
+  <circle cx="150" cy="130" r="260" fill="#ffffff" opacity="0.18"/>
+  <circle cx="1080" cy="790" r="320" fill="#ffffff" opacity="0.12"/>
+  <circle cx="960" cy="160" r="110" fill="#ffffff" opacity="0.10"/>
+  <ellipse cx="600" cy="748" rx="300" ry="40" fill="#0f172a" opacity="0.10"/>
+  <g filter="url(#shadow)">
+  <path d="M652 366 C812 342 846 512 706 548 C578 580 572 676 720 700 C818 716 860 664 856 620" fill="none" stroke="#cbd5e1" stroke-width="42" stroke-linecap="round"/>
+  <path d="M652 366 C812 342 846 512 706 548 C578 580 572 676 720 700 C818 716 860 664 856 620" fill="none" stroke="#f8fafc" stroke-width="26" stroke-linecap="round"/>
+  <rect x="430" y="286" width="240" height="170" rx="40" fill="#f8fafc" stroke="#dbe3ec" stroke-width="3"/>
+  <rect x="500" y="236" width="26" height="70" rx="8" fill="#94a3b8"/>
+  <rect x="574" y="236" width="26" height="70" rx="8" fill="#94a3b8"/>
+  <rect x="468" y="330" width="164" height="72" rx="18" fill="#eef2f7"/>
+  <circle cx="550" cy="366" r="8" fill="#cbd5e1"/>
+  <g transform="rotate(-18 726 578)">
+    <rect x="680" y="550" width="92" height="56" rx="12" fill="#111827"/>
+  </g></g>
+</svg>

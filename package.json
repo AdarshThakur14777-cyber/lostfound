@@ -11,6 +11,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "seed": "tsx scripts/seed.ts",
+    "demo-images": "node scripts/make-demo-images.cjs",
+    "icons": "node scripts/make-icons.cjs",
     "refresh-matches": "tsx scripts/refresh-matches.ts",
     "ageing": "tsx scripts/ageing.ts"
   },

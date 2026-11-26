@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" width="1200" height="900">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f7ecdf"/>
+      <stop offset="1" stop-color="#d9b08c"/>
+    </linearGradient>
+    <linearGradient id="metal" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#94a3b8"/>
+      <stop offset="0.32" stop-color="#f1f5f9"/>
+      <stop offset="0.62" stop-color="#cbd5e1"/>
+      <stop offset="1" stop-color="#94a3b8"/>
+    </linearGradient>
+    <linearGradient id="brass" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#fde68a"/>
+      <stop offset="0.5" stop-color="#d4a24a"/>
+      <stop offset="1" stop-color="#b8862f"/>
+    </linearGradient>
+    <linearGradient id="screen" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1d4ed8"/>
+      <stop offset="1" stop-color="#0ea5e9"/>
+    </linearGradient>
+    <filter id="shadow" x="-30%" y="-30%" width="160%" height="170%">
+      <feDropShadow dx="0" dy="26" stdDeviation="30" flood-color="#0f172a" flood-opacity="0.16"/>
+    </filter>
+  </defs>
+  <rect width="1200" height="900" fill="url(#bg)"/>
+  <circle cx="150" cy="130" r="260" fill="#ffffff" opacity="0.18"/>
+  <circle cx="1080" cy="790" r="320" fill="#ffffff" opacity="0.12"/>
+  <circle cx="960" cy="160" r="110" fill="#ffffff" opacity="0.10"/>
+  <ellipse cx="600" cy="748" rx="300" ry="40" fill="#0f172a" opacity="0.10"/>
+  <g filter="url(#shadow)">
+  <g transform="rotate(-5 600 460)">
+    <rect x="420" y="250" width="210" height="150" rx="16" fill="#f8fafc" transform="rotate(-8 420 250)"/>
+    <rect x="650" y="260" width="160" height="130" rx="16" fill="#e2e8f0" transform="rotate(7 650 260)"/>
+    <rect x="370" y="320" width="460" height="300" rx="34" fill="#9a6a45"/>
+    <rect x="370" y="320" width="460" height="132" rx="34" fill="#b07c52"/>
+    <path d="M402 420 H798" stroke="#d9b08c" stroke-width="4" stroke-dasharray="9 8" fill="none"/>
+    <path d="M400 334 V608" stroke="#d9b08c" stroke-width="4" stroke-dasharray="9 8"/>
+    <rect x="560" y="468" width="80" height="50" rx="15" fill="#7c5233"/>
+    <circle cx="600" cy="493" r="9" fill="#f1c27d"/>
+    <path d="M430 560 H770" stroke="#7c5233" stroke-width="5" stroke-linecap="round" opacity="0.55"/>
+  </g></g>
+</svg>

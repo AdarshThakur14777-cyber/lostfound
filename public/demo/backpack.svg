@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" width="1200" height="900">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#e0f2fe"/>
+      <stop offset="1" stop-color="#bae6fd"/>
+    </linearGradient>
+    <linearGradient id="metal" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#94a3b8"/>
+      <stop offset="0.32" stop-color="#f1f5f9"/>
+      <stop offset="0.62" stop-color="#cbd5e1"/>
+      <stop offset="1" stop-color="#94a3b8"/>
+    </linearGradient>
+    <linearGradient id="brass" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#fde68a"/>
+      <stop offset="0.5" stop-color="#d4a24a"/>
+      <stop offset="1" stop-color="#b8862f"/>
+    </linearGradient>
+    <linearGradient id="screen" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1d4ed8"/>
+      <stop offset="1" stop-color="#0ea5e9"/>
+    </linearGradient>
+    <filter id="shadow" x="-30%" y="-30%" width="160%" height="170%">
+      <feDropShadow dx="0" dy="26" stdDeviation="30" flood-color="#0f172a" flood-opacity="0.16"/>
+    </filter>
+  </defs>
+  <rect width="1200" height="900" fill="url(#bg)"/>
+  <circle cx="150" cy="130" r="260" fill="#ffffff" opacity="0.18"/>
+  <circle cx="1080" cy="790" r="320" fill="#ffffff" opacity="0.12"/>
+  <circle cx="960" cy="160" r="110" fill="#ffffff" opacity="0.10"/>
+  <ellipse cx="600" cy="748" rx="300" ry="40" fill="#0f172a" opacity="0.10"/>
+  <g filter="url(#shadow)">
+  <path d="M486 300 Q486 224 600 224 Q714 224 714 300 L734 690 Q734 744 676 744 L524 744 Q466 744 466 690 Z" fill="#1d4ed8"/>
+  <path d="M540 238 Q600 186 660 238" fill="none" stroke="#1e40af" stroke-width="28" stroke-linecap="round"/>
+  <path d="M500 330 L472 700" stroke="#1e40af" stroke-width="34" stroke-linecap="round"/>
+  <path d="M700 330 L728 700" stroke="#1e40af" stroke-width="34" stroke-linecap="round"/>
+  <rect x="500" y="424" width="200" height="214" rx="46" fill="#2563eb"/>
+  <path d="M520 458 Q600 500 680 458" fill="none" stroke="#93c5fd" stroke-width="8" stroke-linecap="round"/>
+  <circle cx="680" cy="466" r="10" fill="#dbeafe"/>
+  <path d="M540 592 Q600 632 660 592" fill="none" stroke="#1e40af" stroke-width="8" stroke-linecap="round"/>
+  <path d="M466 620 q-38 12 -42 78" fill="none" stroke="#1e40af" stroke-width="22" stroke-linecap="round"/>
+  <path d="M734 620 q38 12 42 78" fill="none" stroke="#1e40af" stroke-width="22" stroke-linecap="round"/></g>
+</svg>

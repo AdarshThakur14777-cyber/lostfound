@@ -154,6 +154,7 @@ async function main() {
       location: "floor-2",
       daysAgo: 2,
       attributes: { brand: "Nokia", colour: "black", case: "navy blue" },
+      images: ["/demo/phone.svg"],
       reporter: student,
     },
     {
@@ -165,6 +166,7 @@ async function main() {
       location: "floor-2",
       daysAgo: 1,
       attributes: { brand: "Nokia", colour: "black", case: "navy blue" },
+      images: ["/demo/phone.svg"],
       reporter: staff,
       privateDetails: [
         ["What is written on a sticker inside the case?", "asha-2026"],
@@ -181,6 +183,7 @@ async function main() {
       location: "mess",
       daysAgo: 4,
       attributes: { keyring: "steel ring", tag: "red" },
+      images: ["/demo/keys.svg"],
       reporter: student2,
     },
     {
@@ -192,6 +195,7 @@ async function main() {
       location: "mess",
       daysAgo: 2,
       attributes: { keyring: "steel ring", tag: "red" },
+      images: ["/demo/keys.svg"],
       reporter: security,
       privateDetails: [
         ["Which building number is on the main key?", "Hostel C-14"],
@@ -207,6 +211,7 @@ async function main() {
       location: "cafeteria",
       daysAgo: 1,
       attributes: { colour: "brown", material: "leather" },
+      images: ["/demo/wallet.svg"],
       reporter: staff,
     },
     {
@@ -218,6 +223,7 @@ async function main() {
       location: "cafeteria",
       daysAgo: 1,
       attributes: { colour: "brown", material: "leather" },
+      images: ["/demo/wallet.svg"],
       reporter: security,
       privateDetails: [
         ["What is the first name on the library card inside?", "Nina"],
@@ -234,6 +240,7 @@ async function main() {
       location: "lecture-hall-1",
       daysAgo: 3,
       attributes: { colour: "blue", brand: "Herschel" },
+      images: ["/demo/backpack.svg"],
       reporter: student,
     },
     {
@@ -245,6 +252,7 @@ async function main() {
       location: "lecture-hall-1",
       daysAgo: 2,
       attributes: { colour: "blue", brand: "Herschel" },
+      images: ["/demo/backpack.svg"],
       reporter: staff,
       privateDetails: [
         ["What is written on the luggage tag?", "Asha, CSE"],
@@ -260,6 +268,7 @@ async function main() {
       location: "reading-room",
       daysAgo: 6,
       attributes: { brand: "HP", colour: "silver" },
+      images: ["/demo/charger.svg"],
       reporter: student2,
     },
     {
@@ -271,6 +280,7 @@ async function main() {
       location: "reading-room",
       daysAgo: 3,
       attributes: { brand: "HP", colour: "silver" },
+      images: ["/demo/charger.svg"],
       reporter: security,
       privateDetails: [
         ["What is scratched on the adapter casing?", "RM 07"],
@@ -286,6 +296,7 @@ async function main() {
       location: "gym",
       daysAgo: 5,
       attributes: { colour: "grey", material: "stainless steel" },
+      images: ["/demo/bottle.svg"],
       reporter: student,
     },
     {
@@ -297,6 +308,7 @@ async function main() {
       location: "gym",
       daysAgo: 2,
       attributes: { colour: "grey", material: "stainless steel" },
+      images: ["/demo/bottle.svg"],
       reporter: security,
       privateDetails: [
         ["Which sticker is on the cap?", "Ladakh 2024"],
@@ -312,6 +324,7 @@ async function main() {
       location: "reading-room",
       daysAgo: 7,
       attributes: { subject: "calculus", colour: "blue" },
+      images: ["/demo/textbook.svg"],
       reporter: student2,
     },
     {
@@ -323,6 +336,7 @@ async function main() {
       location: "reading-room",
       daysAgo: 4,
       attributes: { subject: "calculus", colour: "blue" },
+      images: ["/demo/textbook.svg"],
       reporter: staff,
       privateDetails: [
         ["What is doodled on the inside cover?", "a small rocket"],
@@ -337,6 +351,7 @@ async function main() {
       location: "main-ground",
       daysAgo: 9,
       attributes: { brand: "Sony", colour: "black", type: "over-ear" },
+      images: ["/demo/headphones.svg"],
       reporter: security,
       privateDetails: [["What is written on the left ear cup in white ink?", "KJ"]],
     },
@@ -348,6 +363,7 @@ async function main() {
       location: "two-wheeler-parking",
       daysAgo: 12,
       attributes: { type: "student ID" },
+      images: ["/demo/id-card.svg"],
       reporter: student,
     },
     {
@@ -358,6 +374,7 @@ async function main() {
       location: "common-room",
       daysAgo: 14,
       attributes: { colour: "grey", type: "hoodie" },
+      images: ["/demo/hoodie.svg"],
       reporter: student2,
     },
     {
@@ -368,6 +385,7 @@ async function main() {
       location: "common-room",
       daysAgo: 11,
       attributes: { colour: "grey", type: "hoodie" },
+      images: ["/demo/hoodie.svg"],
       reporter: security,
       privateDetails: [["What is embroidered on the chest pocket?", "R.M."]],
     },
@@ -385,7 +403,7 @@ async function main() {
       locationId: seed.location,
       occurredAt: daysAgo(seed.daysAgo, 8),
       attributes: seed.attributes ?? {},
-      images: [],
+      images: seed.images ?? [],
       status: "open",
       reporterId: seed.reporter._id,
       hasPrivateDetails: Boolean(seed.privateDetails?.length),
