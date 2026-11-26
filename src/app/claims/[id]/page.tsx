@@ -3,6 +3,13 @@
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
+import {
+  AlertIcon,
+  CheckCircleIcon,
+  ChevronRightIcon,
+  ClockIcon,
+  ShieldCheckIcon,
+} from "@/components/icons";
 import { api, formatDate } from "@/lib/client/api";
 import { useMe } from "@/lib/client/me";
 import type { PublicItem } from "@/lib/serialize/public";
@@ -107,8 +114,7 @@ export default function ClaimPage() {
         }),
       });
       setOutcome(result);
-      if (result.passed) await load();
-      else await load();
+      await load();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Verification failed to submit");
     } finally {
@@ -146,13 +152,24 @@ export default function ClaimPage() {
     claim.questions != null && claim.questions.length > 0 && claim.status === "pending" && claim.attemptsLeft > 0;
 
   return (
-    <div className="container page" style={{ maxWidth: 680 }}>
+    <div className="container page claim-page" style={{ maxWidth: 720 }}>
+      <nav className="breadcrumbs" aria-label="Breadcrumb">
+        <Link href="/me">My claims</Link>
+        <ChevronRightIcon size={13} />
+        <span aria-current="page">{claim.item?.title ?? "Claim"}</span>
+      </nav>
+
       <div className="page-head">
         <div>
+          <span className="eyebrow muted">Ownership check</span>
           <h1>Claim on “{claim.item?.title ?? "item"}”</h1>
-          <p>
-            Opened {formatDate(claim.createdAt)} · attempt {claim.attempts + (canAnswer ? 1 : 0)} of{" "}
-            {claim.attemptsLeft + claim.attempts}
+          <p className="detail-meta">
+            <span>
+              <ClockIcon size={14} /> Opened {formatDate(claim.createdAt)}
+            </span>
+            <span>
+              Attempt {claim.attempts + (canAnswer ? 1 : 0)} of {claim.attemptsLeft + claim.attempts}
+            </span>
           </p>
         </div>
         <Link href={`/items/${claim.itemId}`} className="btn secondary">
@@ -160,11 +177,19 @@ export default function ClaimPage() {
         </Link>
       </div>
 
-      <div className={`notice ${copy.tone}`}>
-        <strong>{copy.title}.</strong> {copy.body}
+      <div className={`notice ${copy.tone}`} role="status" aria-live="polite">
+        <ShieldCheckIcon size={18} />
+        <span>
+          <strong>{copy.title}.</strong> {copy.body}
+        </span>
       </div>
 
-      {error && <div className="notice error">{error}</div>}
+      {error && (
+        <div className="notice error" role="alert">
+          <AlertIcon size={17} />
+          <span>{error}</span>
+        </div>
+      )}
 
       {claim.status === "verification_failed" && (
         <div className="card plain mb">
@@ -183,14 +208,23 @@ export default function ClaimPage() {
             {claim.attemptsLeft} left.
           </p>
 
-          {claim.questions!.map((question) => (
+          {claim.questions!.map((question, index) => (
             <div className="question" key={question.entryId}>
-              <div className="q">{question.question}</div>
+              <div className="question-head">
+                <span className="question-num" aria-hidden="true">
+                  {index + 1}
+                </span>
+                <label className="q" htmlFor={`answer-${question.entryId}`}>
+                  {question.question}
+                </label>
+              </div>
               <input
+                id={`answer-${question.entryId}`}
                 type="text"
                 value={answers[question.entryId] ?? ""}
                 placeholder="Your answer"
                 maxLength={300}
+                autoComplete="off"
                 onChange={(event) =>
                   setAnswers((current) => ({ ...current, [question.entryId]: event.target.value }))
                 }
@@ -199,9 +233,12 @@ export default function ClaimPage() {
           ))}
 
           {outcome && !outcome.passed && (
-            <div className="notice warn">
-              {outcome.correctCount} of {outcome.requiredCorrect} correct. {outcome.attemptsLeft} attempt(s)
-              remaining.
+            <div className="notice warn" role="status">
+              <AlertIcon size={17} />
+              <span>
+                {outcome.correctCount} of {outcome.requiredCorrect} correct. {outcome.attemptsLeft} attempt(s)
+                remaining.
+              </span>
             </div>
           )}
 
@@ -218,19 +255,23 @@ export default function ClaimPage() {
       )}
 
       {outcome?.passed && (
-        <div className="notice success">
-          Answers matched ({outcome.correctCount}/{outcome.requiredCorrect}). Your claim is now queued for
-          security review.
+        <div className="notice success" role="status">
+          <CheckCircleIcon size={18} />
+          <span>
+            Answers matched ({outcome.correctCount}/{outcome.requiredCorrect}). Your claim is now queued for
+            security review.
+          </span>
         </div>
       )}
 
       <div className="card plain">
+        <h2 className="card-title">Claim summary</h2>
         <dl className="kv">
           <dt>Status</dt>
           <dd>{claim.status.replace(/_/g, " ")}</dd>
           <dt>Your note</dt>
           <dd>{claim.note}</dd>
-          <dt>Reviewer</dt>
+          <dt>Reviewed</dt>
           <dd>{claim.decidedAt ? formatDate(claim.decidedAt) : "Not reviewed yet"}</dd>
           {claim.decisionNote && (
             <>

@@ -1,12 +1,12 @@
 import { NextRequest } from "next/server";
 import { z } from "zod";
 import { getDb } from "@/lib/db";
-import { handler, json, conflict } from "@/lib/http";
+import { handler, json, conflict, forbidden } from "@/lib/http";
 import { hashPassword, randomId } from "@/lib/crypto";
 import { sessionCookie, type SessionUser } from "@/lib/auth";
 import { publicUser } from "@/lib/users";
 import { users } from "@/models/collections";
-import type { Role, UserDoc } from "@/models/types";
+import type { UserDoc } from "@/models/types";
 
 export const dynamic = "force-dynamic";
 
@@ -14,24 +14,28 @@ const schema = z.object({
   name: z.string().trim().min(2).max(120),
   email: z.email().max(200),
   password: z.string().min(8).max(200),
+  // Accepted only so an outdated client gets a clear error instead of a
+  // silently ignored field. Public registration can never choose a role.
   role: z.enum(["student", "staff"]).optional(),
   department: z.string().trim().max(120).optional(),
 });
 
 export const POST = handler(async (req: NextRequest) => {
   const body = schema.parse(await req.json());
+  if (body.role && body.role !== "student") {
+    throw forbidden("Staff accounts are created by campus administration");
+  }
   const db = await getDb();
   const email = body.email.toLowerCase();
   const existing = await users(db).findOne({ email });
   if (existing) throw conflict("An account with that email already exists");
 
-  const role: Role = body.role ?? "student";
   const doc: UserDoc = {
     _id: randomId(9),
     name: body.name,
     email,
     passwordHash: await hashPassword(body.password),
-    role,
+    role: "student",
     department: body.department,
     active: true,
     createdAt: new Date(),

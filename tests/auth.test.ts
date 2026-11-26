@@ -42,6 +42,28 @@ describe("authentication and roles", () => {
     expect(logout.status).toBe(200);
   });
 
+  it("does not allow public staff registration", async () => {
+    const res = await request("/api/auth/register", {
+      method: "POST",
+      body: {
+        name: "Self Made Staff",
+        email: "not.staff@test.local",
+        password: "Password123!",
+        role: "staff",
+      },
+    });
+    expect(res.status).toBe(403);
+    expect(((await res.json()) as { error: string }).error).toBe(
+      "Staff accounts are created by campus administration",
+    );
+
+    const login = await request("/api/auth/login", {
+      method: "POST",
+      body: { email: "not.staff@test.local", password: "Password123!" },
+    });
+    expect(login.status).toBe(400);
+  });
+
   it("returns a bearer token for the mobile app and accepts it on requests", async () => {
     const user = await makeUser({ email: "mobile@test.local" });
     const login = await request("/api/auth/login", {

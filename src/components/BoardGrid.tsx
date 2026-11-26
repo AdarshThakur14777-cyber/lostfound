@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { api } from "@/lib/client/api";
 import type { PublicCategory, PublicListItem, PublicLocation } from "@/lib/serialize/public";
+import { FilterIcon, RefreshIcon, SearchIcon, XIcon } from "./icons";
 import { ItemCard } from "./ItemCard";
 
 interface BoardResponse {
@@ -22,6 +23,20 @@ export interface BoardFilters {
   q?: string;
 }
 
+function ItemSkeleton() {
+  return (
+    <div className="item-card skeleton-card" aria-hidden="true">
+      <div className="skeleton skeleton-thumb" />
+      <div className="skeleton-body">
+        <div className="skeleton skeleton-line short" />
+        <div className="skeleton skeleton-line" />
+        <div className="skeleton skeleton-line tiny" />
+        <div className="skeleton skeleton-line tiny" />
+      </div>
+    </div>
+  );
+}
+
 export function BoardGrid({
   filters = {},
   showFilters = false,
@@ -37,13 +52,22 @@ export function BoardGrid({
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [taxonomy, setTaxonomy] = useState<TaxonomyResponse | null>(null);
-  const [local, setLocal] = useState<BoardFilters>({ type: "", category: "", location: "", q: "" });
+  const [local, setLocal] = useState<Omit<BoardFilters, "q">>({ type: "", category: "", location: "" });
+  const [query, setQuery] = useState("");
+  const [debouncedQuery, setDebouncedQuery] = useState("");
   const sentinel = useRef<HTMLDivElement>(null);
   const busy = useRef(false);
 
-  const effective: BoardFilters = { ...filters, ...Object.fromEntries(
-    Object.entries(local).filter(([, value]) => Boolean(value)),
-  ) };
+  useEffect(() => {
+    const timer = setTimeout(() => setDebouncedQuery(query.trim()), 300);
+    return () => clearTimeout(timer);
+  }, [query]);
+
+  const effective: BoardFilters = {
+    ...filters,
+    ...Object.fromEntries(Object.entries(local).filter(([, value]) => Boolean(value))),
+    ...(debouncedQuery ? { q: debouncedQuery } : {}),
+  };
 
   const load = useCallback(
     async (reset: boolean) => {
@@ -107,72 +131,144 @@ export function BoardGrid({
     return () => observer.disconnect();
   }, [hasMore, loading, load]);
 
+  const hasFilters = Boolean(
+    local.type || local.category || local.location || query || filters.type || filters.category || filters.location || filters.q,
+  );
+
+  function resetFilters() {
+    setLocal({ type: "", category: "", location: "" });
+    setQuery("");
+    setDebouncedQuery("");
+  }
+
   return (
-    <div>
+    <div className="board-grid-wrap">
       {showFilters && (
-        <div className="filters">
-          <select
-            value={local.type ?? ""}
-            onChange={(event) => setLocal((f) => ({ ...f, type: event.target.value }))}
-            aria-label="Type"
-          >
-            <option value="">Lost &amp; found</option>
-            <option value="lost">Lost only</option>
-            <option value="found">Found only</option>
-          </select>
-          <select
-            value={local.category ?? ""}
-            onChange={(event) => setLocal((f) => ({ ...f, category: event.target.value }))}
-            aria-label="Category"
-          >
-            <option value="">All categories</option>
-            {taxonomy?.categories.map((category) => (
-              <option key={category.id} value={category.id}>
-                {category.name}
-              </option>
-            ))}
-          </select>
-          <select
-            value={local.location ?? ""}
-            onChange={(event) => setLocal((f) => ({ ...f, location: event.target.value }))}
-            aria-label="Location"
-          >
-            <option value="">All locations</option>
-            {taxonomy?.locations.map((location) => (
-              <option key={location.id} value={location.id}>
-                {location.path.join(" › ")}
-              </option>
-            ))}
-          </select>
-          <input
-            type="search"
-            placeholder="Search…"
-            value={local.q ?? ""}
-            onChange={(event) => setLocal((f) => ({ ...f, q: event.target.value }))}
-            aria-label="Search"
-          />
+        <div className="filters-card">
+          <div className="filter-top">
+            <div className="filter-seg" role="group" aria-label="Filter by type">
+              {[
+                { value: "", label: "All listings" },
+                { value: "lost", label: "Lost" },
+                { value: "found", label: "Found" },
+              ].map((option) => (
+                <button
+                  key={option.value}
+                  type="button"
+                  className={local.type === option.value ? "active" : ""}
+                  aria-pressed={local.type === option.value}
+                  onClick={() => setLocal((current) => ({ ...current, type: option.value }))}
+                >
+                  {option.label}
+                </button>
+              ))}
+            </div>
+            <div className="search-field">
+              <SearchIcon size={18} />
+              <input
+                type="search"
+                placeholder="Search the board…"
+                value={query}
+                enterKeyHint="search"
+                onChange={(event) => setQuery(event.target.value)}
+                aria-label="Search listings"
+              />
+              {query && (
+                <button type="button" className="search-clear" onClick={() => setQuery("")} aria-label="Clear search">
+                  <XIcon size={15} />
+                </button>
+              )}
+            </div>
+          </div>
+          <div className="filter-selects">
+            <span className="filter-label">
+              <FilterIcon size={15} /> Refine
+            </span>
+            <select
+              value={local.category ?? ""}
+              onChange={(event) => setLocal((current) => ({ ...current, category: event.target.value }))}
+              aria-label="Filter by category"
+            >
+              <option value="">All categories</option>
+              {taxonomy?.categories.map((category) => (
+                <option key={category.id} value={category.id}>
+                  {category.name}
+                </option>
+              ))}
+            </select>
+            <select
+              value={local.location ?? ""}
+              onChange={(event) => setLocal((current) => ({ ...current, location: event.target.value }))}
+              aria-label="Filter by location"
+            >
+              <option value="">All locations</option>
+              {taxonomy?.locations.map((location) => (
+                <option key={location.id} value={location.id}>
+                  {location.path.join(" › ")}
+                </option>
+              ))}
+            </select>
+            {hasFilters && (
+              <button type="button" className="btn ghost small clear-filters" onClick={resetFilters}>
+                <XIcon size={14} /> Clear filters
+              </button>
+            )}
+          </div>
         </div>
       )}
 
-      {error && <div className="notice error">{error}</div>}
+      <div className="board-status" aria-live="polite">
+        <span className="live-dot" aria-hidden="true" />
+        {loading && items.length === 0
+          ? "Loading listings…"
+          : `${items.length} listing${items.length === 1 ? "" : "s"}${hasMore ? " · more below" : ""}`}
+      </div>
 
-      {items.length === 0 && !loading ? (
-        <div className="empty">No items match these filters yet.</div>
-      ) : (
-        <div className="grid three">
-          {items.map((item) => (
-            <ItemCard key={item.id} item={item} />
-          ))}
-          {loading &&
-            Array.from({ length: 3 }).map((_, index) => <div key={index} className="skeleton" />)}
+      {error && (
+        <div className="notice error">
+          <span>{error}</span>
+          <button type="button" className="btn secondary small" onClick={() => void load(true)}>
+            <RefreshIcon size={15} /> Try again
+          </button>
+        </div>
+      )}
+
+      <div className="grid three" aria-busy={loading}>
+        {items.map((item) => (
+          <ItemCard key={item.id} item={item} />
+        ))}
+        {loading && items.length === 0 && Array.from({ length: limit >= 6 ? 6 : 3 }).map((_, index) => <ItemSkeleton key={index} />)}
+      </div>
+
+      {items.length === 0 && !loading && !error && (
+        <div className="empty">
+          <span className="empty-icon">
+            <SearchIcon size={26} />
+          </span>
+          <h3>{hasFilters ? "No listings match those filters" : "The board is quiet right now"}</h3>
+          <p>
+            {hasFilters
+              ? "Try a broader search, another category, or clear the filters."
+              : "Be the first to report something — it only takes a minute."}
+          </p>
+          <div className="empty-actions">
+            {hasFilters ? (
+              <button type="button" className="btn secondary" onClick={resetFilters}>
+                <XIcon size={16} /> Clear filters
+              </button>
+            ) : null}
+            <a href="/report" className="btn">
+              New report
+            </a>
+          </div>
         </div>
       )}
 
       <div ref={sentinel} className="sentinel" />
-      {hasMore && !loading && (
+      {hasMore && !loading && items.length > 0 && (
         <div className="center mt">
           <button type="button" className="btn secondary" onClick={() => void load(false)}>
-            Load more
+            Load more listings
           </button>
         </div>
       )}
